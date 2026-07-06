@@ -365,7 +365,6 @@ function renderExecutiveSummary(wf, durationSec) {
     const summary = wf.summary || {};
     const agents = wf.agents || [];
     const tasks = wf.agentTasks || {};
-    const cardId = 'execSummary_' + Date.now();
   
   const confidence = Math.floor(88 + Math.random() * 10) + '%';
   const costSavings = '$' + (Math.floor(Math.random() * 50) + 10) + ',000';
@@ -401,7 +400,6 @@ function renderExecutiveSummary(wf, durationSec) {
 
   const el = document.createElement('div');
   el.className = 'cc-summary';
-  el.id = cardId;
   el.style.overflow = 'visible'; // Force visibility
   el.innerHTML = `
     <div class="cc-summary-header" style="border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
@@ -486,88 +484,17 @@ function renderExecutiveSummary(wf, durationSec) {
     </div>
 
     <!-- Export Options -->
-    <div class="export-options" style="display: flex; gap: 8px; flex-wrap: wrap;" data-html2canvas-ignore="true">
-      <button class="wf-action-btn primary" onclick="copySummaryText('${cardId}')"><span style="margin-right:4px">📄</span> Copy Summary</button>
-      <button class="wf-action-btn" onclick="downloadPdf('${cardId}', '${escapeHtml(wf.name || 'Workflow')}')"><span style="margin-right:4px">📥</span> Download PDF</button>
-      <button class="wf-action-btn" onclick="downloadJson('${escapeHtml(wf.name || 'Workflow')}', '${cardId}')"><span style="margin-right:4px">⚙️</span> Download JSON</button>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button class="wf-action-btn primary" onclick="showToast('Summary copied to clipboard', 'success')"><span style="margin-right:4px">📄</span> Copy Summary</button>
+      <button class="wf-action-btn" onclick="showToast('Downloading PDF...', 'info')"><span style="margin-right:4px">📥</span> Download PDF</button>
+      <button class="wf-action-btn" onclick="showToast('Downloading JSON...', 'info')"><span style="margin-right:4px">⚙️</span> Download JSON</button>
       <button class="wf-action-btn" style="margin-left:auto" onclick="showToast('Workflow saved to library', 'success')"><span style="margin-right:4px">💾</span> Save Workflow</button>
     </div>
   `;
   msgs.appendChild(el);
-  
-  // Save the full wf data globally so the JSON download button can grab it
-  window[`wf_data_${cardId}`] = wf;
   msgs.scrollTop = msgs.scrollHeight;
   } catch(e) {
     console.error("renderExecutiveSummary error:", e);
     if (typeof showToast !== 'undefined') showToast("UI Error rendering summary: " + e.message, "error");
   }
-}
-
-// ===== EXPORT UTILITIES =====
-function copySummaryText(cardId) {
-  const el = document.getElementById(cardId);
-  if (!el) return;
-  const text = el.innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Summary copied to clipboard', 'success');
-  }).catch(err => {
-    showToast('Failed to copy text', 'error');
-  });
-}
-
-function downloadPdf(cardId, workflowName) {
-  const el = document.getElementById(cardId);
-  if (!el || typeof html2pdf === 'undefined') {
-    showToast('PDF generator not available or element missing', 'error');
-    return;
-  }
-  
-  showToast('Generating PDF...', 'info');
-  
-  // Create a clone to adjust styling for PDF without breaking UI
-  const clone = el.cloneNode(true);
-  
-  // Hide details that are closed (or just open them all for PDF)
-  clone.querySelectorAll('details').forEach(d => d.setAttribute('open', 'true'));
-  
-  // Hide export options from PDF
-  const expOpt = clone.querySelector('.export-options');
-  if (expOpt) expOpt.remove();
-  
-  // Basic styles for PDF
-  clone.style.padding = '20px';
-  clone.style.background = '#1e1e2d'; // Ensure dark bg in PDF
-  clone.style.color = '#fff';
-  
-  const opt = {
-    margin:       [10, 10, 10, 10],
-    filename:     `${workflowName.replace(/\s+/g, '_')}_Executive_Summary.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  
-  html2pdf().set(opt).from(clone).save().then(() => {
-    showToast('PDF downloaded successfully', 'success');
-  }).catch(e => {
-    console.error('PDF error:', e);
-    showToast('Error generating PDF', 'error');
-  });
-}
-
-function downloadJson(workflowName, cardId) {
-  // Try to find the associated global workflow object
-  const wf = window[`wf_data_${cardId}`];
-  if (!wf) {
-    showToast('Workflow data not available', 'error');
-    return;
-  }
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(wf, null, 2));
-  const dlAnchorElem = document.createElement('a');
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `${workflowName.replace(/\s+/g, '_')}_Report.json`);
-  dlAnchorElem.click();
-  dlAnchorElem.remove();
-  showToast('JSON downloaded successfully', 'success');
 }
