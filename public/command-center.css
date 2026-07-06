@@ -291,13 +291,15 @@
   border-radius: var(--radius-md);
   padding: 18px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   animation: fadeInUp 0.4s ease forwards;
 }
 .cc-planning-panel::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
   background: linear-gradient(90deg, #6366f1, #8b5cf6, #22d3ee);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
 }
 
 .cpp-header {
