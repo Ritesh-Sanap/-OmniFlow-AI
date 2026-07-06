@@ -41,6 +41,7 @@ class WorkflowEngine {
     this.onPlanReady    = null; // (wf: object) => void          — called after CEO thinking, before agents start
     this.onAgentState   = null; // (agentKey: string, state: 'waiting'|'thinking'|'running'|'completed') => void
     this.onLog          = null; // (text: string, agentKey: string) => void
+    this.onApprovalRequested = null; // (agentKey: string, task: string, resolve: function, reject: function) => void
     this.onSummary      = null; // (summary: object) => void
     this.onComplete     = null; // () => void
     this.onError        = null; // (message: string) => void
@@ -86,6 +87,9 @@ class WorkflowEngine {
         output:        `Activated agents: ${(this.currentWf.agents || []).map(k => (AGENT_DB[k] || {name: k}).name).join(', ')}`,
         executionTime: `${(CEO_THINKING_STEPS.length * 0.9).toFixed(1)}s`,
         status:        'Completed',
+        confidence:    Math.floor(92 + Math.random() * 7) + '%',
+        memory:        '142 previous CEO workflows indexed',
+        toolUsage:     ['ExecutionPlanner', 'AgentDirectory', 'GoalAnalyzer']
       };
     }
 
@@ -100,6 +104,9 @@ class WorkflowEngine {
       output:        td.output    || '',
       executionTime: `${((td.logs || []).length * 1.4).toFixed(1)}s`,
       status:        'Completed',
+      confidence:    Math.floor(85 + Math.random() * 14) + '%',
+      memory:        `${Math.floor(12 + Math.random() * 45)} previous context interactions loaded`,
+      toolUsage:     td.tools     || [`${agentMeta.name.split(' ')[0]}Tool`, 'VectorSearchDB']
     };
   }
 
@@ -143,6 +150,19 @@ class WorkflowEngine {
         const agentName = (AGENT_DB[agentKey] || {name: agentKey}).name;
         if (this.onLog) this.onLog(`${agentName}: ${logLine}`, agentKey);
         await this._delay(1300);
+      }
+
+      if (agentKey === 'finance' || agentKey === 'marketing') {
+        if (this.onAgentState) this.onAgentState(agentKey, 'waiting_approval');
+        if (this.onLog) this.onLog(`[PAUSED] Action requires human approval...`, 'system');
+        await new Promise((resolve, reject) => {
+          if (this.onApprovalRequested) {
+            this.onApprovalRequested(agentKey, td.task || agentKey, resolve, reject);
+          } else {
+            resolve(); // Auto-approve if no UI hooked up
+          }
+        });
+        if (this.onLog) this.onLog(`✅ Approval granted. Resuming workflow...`, 'system');
       }
 
       if (this.onAgentState) this.onAgentState(agentKey, 'completed');

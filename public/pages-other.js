@@ -41,7 +41,39 @@ function kbDocCard(d) {
 }
 
 function initKnowledgeBaseListeners() {
-  document.getElementById('kbUploadBtn')?.addEventListener('click', () => showToast('Document upload UI — RAG pipeline ready for integration','info'));
+  document.getElementById('kbUploadBtn')?.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf,.docx,.txt,.csv,.xlsx';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      showToast(`Uploading ${file.name} to RAG pipeline...`, 'info');
+      
+      // Simulate RAG chunking and vector embedding
+      setTimeout(() => {
+        showToast(`Extracting text and chunking...`, 'info');
+        setTimeout(() => {
+          showToast(`Generating Gemini embeddings...`, 'info');
+          setTimeout(() => {
+            const newDoc = {
+              id: 'doc_' + Date.now(),
+              title: file.name,
+              cat: 'Operations', // Default category
+              size: (file.size / 1024 / 1024).toFixed(1) + ' MB',
+              date: 'Just now',
+              tags: ['uploaded', 'vectorized'],
+              indexed: true
+            };
+            KB_DOCS.unshift(newDoc);
+            renderKnowledgeBasePage(); // Re-render to show new doc
+            showToast(`${file.name} successfully vectorized and added to Knowledge Base`, 'success');
+          }, 1500);
+        }, 1200);
+      }, 1000);
+    };
+    input.click();
+  });
   const search = document.getElementById('kbSearch');
   search?.addEventListener('input', () => filterKbDocs());
   document.querySelectorAll('.kb-cat-btn').forEach(btn => {
