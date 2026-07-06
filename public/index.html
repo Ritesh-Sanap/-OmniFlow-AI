@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OmniFlow AI — Enterprise AI Operating System for intelligent workflow automation." />
+  <title>OmniFlow AI — Enterprise AI Operating System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-wrapper" id="mainWrapper">
+    <header class="topbar" id="topbar"></header>
+    <main class="content" id="content"></main>
+  </div>
+
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Agent Detail Panel -->
+  <div class="agent-detail-overlay" id="agentDetailOverlay"></div>
+  <div class="agent-detail-panel" id="agentDetailPanel"></div>
+
+  <!-- Core engine -->
+  <script src="simulation.js"></script>
+  <script src="workflow-store.js"></script>
+  <!-- Page data + renderers -->
+  <script src="pages-data.js"></script>
+  <script src="pages-workflows.js"></script>
+  <script src="pages-other.js"></script>
+  <!-- Shared components + app bootstrap -->
+  <script src="components.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
