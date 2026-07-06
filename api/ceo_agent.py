@@ -127,7 +127,7 @@ def _normalize_plan(raw: dict, user_command: str) -> dict:
     # Filter to only valid agent keys; lowercase everything
     agents = [a.lower().strip() for a in agents_raw if isinstance(a, str) and a.lower().strip() in VALID_AGENTS]
     if not agents:
-        agents = ["finance"]  # safe fallback
+        agents = ["marketing", "inventory", "finance", "support"]  # safe fallback
 
     # --- agentTasks ---
     raw_tasks = raw.get("agentTasks") or raw.get("agent_tasks") or raw.get("tasks") or {}
@@ -214,7 +214,7 @@ def create_workflow_plan(user_command: str) -> dict:
     return _normalize_plan({
         "name": "General Business Workflow",
         "ceoReasoning": f"Processing request: {user_command[:80]}. Routing to core operational agents.",
-        "agents": ["finance", "inventory"],
+        "agents": ["marketing", "inventory", "finance", "support"],
         "agentTasks": {},
         "summary": {
             "title": "Workflow Executed",
