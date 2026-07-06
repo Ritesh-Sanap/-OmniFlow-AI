@@ -14,6 +14,7 @@
 .cc-msg {
   display: flex; gap: 10px; padding: 12px 16px;
   border-radius: var(--radius-md); max-width: 92%;
+  flex-shrink: 0;
   animation: fadeInUp 0.3s ease forwards;
 }
 .cc-msg.user { align-self: flex-end; background: var(--gradient-glow); border: 1px solid rgba(99,102,241,0.2); }
@@ -36,7 +37,7 @@
 .cc-thinking {
   display: flex; align-items: center; gap: 10px;
   padding: 14px 18px; background: var(--bg-card); border: 1px solid rgba(99,102,241,0.15);
-  border-radius: var(--radius-md); animation: fadeInUp 0.3s ease forwards;
+  border-radius: var(--radius-md); flex-shrink: 0; animation: fadeInUp 0.3s ease forwards;
 }
 .cc-thinking-dots { display: flex; gap: 4px; }
 .cc-thinking-dots span {
@@ -225,7 +226,7 @@
   background: var(--bg-card); border: 1px solid rgba(52,211,153,0.2);
   border-radius: var(--radius-md); padding: 20px; margin-top: 12px;
   animation: fadeInUp 0.5s ease forwards;
-  position: relative; overflow: hidden;
+  position: relative; overflow: visible; flex-shrink: 0;
 }
 .cc-summary::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -292,6 +293,7 @@
   padding: 18px;
   position: relative;
   overflow: visible;
+  flex-shrink: 0;
   animation: fadeInUp 0.4s ease forwards;
 }
 .cc-planning-panel::before {
