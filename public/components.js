@@ -299,9 +299,6 @@ function renderAgentDetailPanel(detail) {
       <div class="adp-field"><p class="adp-field-label">Input</p><div class="adp-field-value">${detail.input}</div></div>
       <div class="adp-field"><p class="adp-field-label">Output</p><div class="adp-field-value">${detail.output}</div></div>
       <div class="adp-field"><p class="adp-field-label">Execution Time</p><div class="adp-field-value">${detail.executionTime}</div></div>
-      <div class="adp-field"><p class="adp-field-label">Confidence Score</p><div class="adp-field-value" style="color:var(--accent-green)">${detail.confidence}</div></div>
-      <div class="adp-field"><p class="adp-field-label">Tool Usage</p><div class="adp-field-value" style="font-family:monospace;font-size:0.75rem">${detail.toolUsage.join('<br>')}</div></div>
-      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Agent Memory Context</p><div class="adp-field-value" style="color:var(--accent-blue)">${detail.memory}</div></div>
     </div>
   `;
   panel.classList.add('open');

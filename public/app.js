@@ -318,49 +318,6 @@ async function executeCommand(command) {
     renderPlanningPanel(planWf, command);
   };
 
-  workflowEngine.onApprovalRequested = (agentKey, task, resolve, reject) => {
-    const msgs = document.getElementById('ccMessages');
-    if (!msgs) return resolve();
-    const agentName = (AGENT_DB[agentKey] || {name: agentKey}).name;
-    const cardId = 'approval_' + Date.now();
-    
-    const el = document.createElement('div');
-    el.className = 'cc-summary';
-    el.id = cardId;
-    el.style.border = '1px solid var(--accent-amber)';
-    el.innerHTML = `
-      <div class="cpp-header" style="border-bottom:none; margin-bottom:0; padding-bottom:8px">
-        <span class="cpp-icon">⚠️</span>
-        <div>
-          <p class="cpp-label" style="color:var(--accent-amber)">Human Approval Required</p>
-          <p class="cpp-reasoning"><strong>${agentName}</strong> is requesting approval to execute: <br><em>${escapeHtml(task)}</em></p>
-        </div>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <button class="btn-primary" id="${cardId}_approve" style="background:var(--accent-green)">Approve</button>
-        <button class="wf-action-btn" id="${cardId}_reject" style="color:#f87171; border-color:rgba(248,113,113,0.3)">Reject</button>
-      </div>
-    `;
-    msgs.appendChild(el);
-    msgs.scrollTop = msgs.scrollHeight;
-
-    document.getElementById(`${cardId}_approve`).onclick = () => {
-      el.style.opacity = '0.5';
-      el.style.pointerEvents = 'none';
-      document.getElementById(`${cardId}_approve`).textContent = 'Approved ✓';
-      resolve();
-    };
-
-    document.getElementById(`${cardId}_reject`).onclick = () => {
-      el.style.opacity = '0.5';
-      el.style.pointerEvents = 'none';
-      document.getElementById(`${cardId}_reject`).textContent = 'Rejected ✗';
-      // We resolve anyway to continue simulation gracefully, or we could throw. 
-      // Resolving allows the workflow to proceed without crashing.
-      resolve(); 
-    };
-  };
-
   workflowEngine.onLog = (logText, agentKey) => {
     if (!logsList) return;
     const entry = document.createElement('div');

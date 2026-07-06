@@ -133,12 +133,6 @@
 .cc-exec-step[data-state="running"] .exec-status { color: var(--accent-blue); }
 .cc-exec-step[data-state="thinking"] .exec-status { color: var(--accent-purple); }
 .cc-exec-step[data-state="completed"] .exec-status { color: var(--accent-green); }
-.cc-exec-step[data-state="waiting_approval"] .exec-status { color: var(--accent-amber); font-weight: 600; }
-.cc-exec-step[data-state="waiting_approval"] .exec-node {
-  border-color: var(--accent-amber); opacity: 1;
-  box-shadow: 0 0 15px rgba(251,191,36,0.4);
-  animation: pulse 1s infinite;
-}
 
 .exec-connector {
   width: 2px; height: 12px; background: var(--border);
