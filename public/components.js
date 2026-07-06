@@ -397,6 +397,7 @@ function renderExecutiveSummary(wf, durationSec) {
 
   const el = document.createElement('div');
   el.className = 'cc-summary';
+  el.style.overflow = 'visible'; // Force visibility
   el.innerHTML = `
     <div class="cc-summary-header" style="border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
       <div class="cc-summary-icon">📊</div>
