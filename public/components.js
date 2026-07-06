@@ -374,6 +374,9 @@ function renderExecutiveSummary(wf, durationSec) {
     const summary = wf.summary || {};
     const agents = wf.agents || [];
     const tasks = wf.agentTasks || {};
+    const cardId = 'execSummary_' + Date.now();
+    const isSalesReport = (wf.name || '').toLowerCase().includes('report') || (wf.name || '').toLowerCase().includes('sales');
+    const chartId = 'chart_' + Date.now();
   
   const confidence = Math.floor(88 + Math.random() * 10) + '%';
   const costSavings = '$' + (Math.floor(Math.random() * 50) + 10) + ',000';
@@ -475,6 +478,16 @@ function renderExecutiveSummary(wf, durationSec) {
       </ul>
     </div>
 
+    <!-- Profit & Loss Chart -->
+    ${isSalesReport ? `
+    <div style="margin-bottom: 16px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 6px; padding: 12px;">
+      <p class="cpp-field-label" style="margin-bottom: 12px; color:var(--accent-green);">Monthly Profit & Loss Breakdown</p>
+      <div style="height: 180px; width: 100%;">
+        <canvas id="${chartId}"></canvas>
+      </div>
+    </div>
+    ` : ''}
+
     <!-- Agent Performance (Collapsible) -->
     <details style="margin-bottom: 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 6px;">
       <summary style="padding: 10px 12px; cursor: pointer; font-size: 0.8rem; font-weight: 600; outline: none; display:flex; justify-content:space-between; align-items:center;">
@@ -513,6 +526,32 @@ function renderExecutiveSummary(wf, durationSec) {
   `;
   msgs.appendChild(el);
   msgs.scrollTop = msgs.scrollHeight;
+
+  // Initialize Profit & Loss chart if applicable
+  if (isSalesReport && typeof Chart !== 'undefined') {
+    const ctx = document.getElementById(chartId);
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [
+            { label: 'Profit', data: [12000, 19000, 15000, 24000], backgroundColor: 'rgba(52,211,153,0.6)', borderRadius: 4 },
+            { label: 'Loss', data: [3000, 5000, 2000, 4000], backgroundColor: 'rgba(248,113,113,0.6)', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: true, labels: { color: '#888' } } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888', callback: v => '$' + (v/1000) + 'k' } }
+          }
+        }
+      });
+    }
+  }
+
   } catch(e) {
     console.error("renderExecutiveSummary error:", e);
     if (typeof showToast !== 'undefined') showToast("UI Error rendering summary: " + e.message, "error");
