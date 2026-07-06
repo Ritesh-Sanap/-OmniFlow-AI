@@ -86,6 +86,13 @@ class WorkflowEngine {
         output:        `Activated agents: ${(this.currentWf.agents || []).map(k => (AGENT_DB[k] || {name: k}).name).join(', ')}`,
         executionTime: `${(CEO_THINKING_STEPS.length * 0.9).toFixed(1)}s`,
         status:        'Completed',
+        confidence:    Math.floor(92 + Math.random() * 7) + '%',
+        memory:        '142 previous CEO workflows indexed',
+        toolUsage:     ['ExecutionPlanner', 'AgentDirectory', 'GoalAnalyzer'],
+        logs:          CEO_THINKING_STEPS,
+        dependencies:  ['User Command'],
+        promptSent:    `Analyze user request: ${this.currentWf.name}`,
+        llmResponse:   this.currentWf.ceoReasoning
       };
     }
 
@@ -100,6 +107,13 @@ class WorkflowEngine {
       output:        td.output    || '',
       executionTime: `${((td.logs || []).length * 1.4).toFixed(1)}s`,
       status:        'Completed',
+      confidence:    Math.floor(88 + Math.random() * 10) + '%',
+      memory:        `${Math.floor(10 + Math.random() * 50)} previous contexts loaded`,
+      toolUsage:     td.tools || [`${agentMeta.name.split(' ')[0]}Tool`, 'EnterpriseSearch'],
+      logs:          td.logs || ['Execution finished.'],
+      dependencies:  ['CEO Agent'],
+      promptSent:    `Execute task: ${td.task} for input: ${td.input}`,
+      llmResponse:   td.output || 'Task completed successfully.'
     };
   }
 

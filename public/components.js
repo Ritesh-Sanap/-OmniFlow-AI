@@ -294,11 +294,23 @@ function renderAgentDetailPanel(detail) {
     </div>
     <div class="adp-body">
       <div class="adp-field"><p class="adp-field-label">Status</p><span class="adp-status-badge">${detail.status}</span></div>
-      <div class="adp-field"><p class="adp-field-label">Current Task</p><div class="adp-field-value">${detail.task}</div></div>
-      <div class="adp-field"><p class="adp-field-label">Reasoning Summary</p><div class="adp-field-value">${detail.reasoning}</div></div>
-      <div class="adp-field"><p class="adp-field-label">Input</p><div class="adp-field-value">${detail.input}</div></div>
-      <div class="adp-field"><p class="adp-field-label">Output</p><div class="adp-field-value">${detail.output}</div></div>
+      <div class="adp-field"><p class="adp-field-label">Confidence</p><div class="adp-field-value" style="color:var(--accent-green)">${detail.confidence}</div></div>
       <div class="adp-field"><p class="adp-field-label">Execution Time</p><div class="adp-field-value">${detail.executionTime}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Current Task</p><div class="adp-field-value">${detail.task}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Reasoning</p><div class="adp-field-value">${detail.reasoning}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Input</p><div class="adp-field-value">${detail.input}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Output</p><div class="adp-field-value">${detail.output}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Prompt Sent</p><div class="adp-field-value" style="font-family:monospace; font-size:0.75rem;">${detail.promptSent}</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">LLM Response</p><div class="adp-field-value">${detail.llmResponse}</div></div>
+      <div class="adp-field"><p class="adp-field-label">Tool Calls</p><div class="adp-field-value" style="font-family:monospace; font-size:0.75rem;">${detail.toolUsage.join('<br>')}</div></div>
+      <div class="adp-field"><p class="adp-field-label">Memory Used</p><div class="adp-field-value">${detail.memory}</div></div>
+      <div class="adp-field"><p class="adp-field-label">Dependencies</p><div class="adp-field-value">${detail.dependencies.join(', ')}</div></div>
+      <div class="adp-field"><p class="adp-field-label">Previous Tasks</p><div class="adp-field-value">No prior dependent tasks for this node.</div></div>
+      <div class="adp-field" style="grid-column: span 2;"><p class="adp-field-label">Logs</p>
+        <div class="adp-field-value" style="font-family:monospace; font-size:0.75rem; background:var(--bg-tertiary); padding:8px; border-radius:4px;">
+          ${detail.logs.map(l => '> ' + l).join('<br>')}
+        </div>
+      </div>
     </div>
   `;
   panel.classList.add('open');
