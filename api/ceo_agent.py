@@ -6,7 +6,7 @@ import time
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-from prompts import SYSTEM_PROMPT
+from api.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 

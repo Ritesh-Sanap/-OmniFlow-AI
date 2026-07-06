@@ -260,8 +260,8 @@ async function executeCommand(command) {
   } catch (err) {
     console.error('Plan fetch error:', err);
     removeThinkingBubble();
-    addChatMessage('ai', 'CEO Agent', '⚠️ I encountered an error connecting to the AI backend. Please ensure the server is running at <code>localhost:8000</code>.', '👔');
-    showToast('Backend unreachable. Is uvicorn running?', 'error');
+    addChatMessage('ai', 'CEO Agent', '⚠️ I encountered an error connecting to the AI backend. Please check if the API is running or if the API key is configured correctly.', '👔');
+    showToast('Backend connection failed.', 'error');
     sendBtn.disabled = false;
     if (statusBadge) { statusBadge.textContent = 'Error'; statusBadge.className = 'panel-badge error'; }
     return;

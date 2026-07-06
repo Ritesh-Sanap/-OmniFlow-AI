@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from models import UserCommand
-from ceo_agent import create_workflow_plan
+from api.models import UserCommand
+from api.ceo_agent import create_workflow_plan
 
 from fastapi.staticfiles import StaticFiles
 import os
